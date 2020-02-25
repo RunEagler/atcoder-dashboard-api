@@ -1,0 +1,45 @@
+
+!define METAL #F2F2F2-D9D9D9
+!define MASTER #f0fff0
+!define TRANSACTION #ffe4e1
+
+!define T_I <color:grey>INTEGER</color>
+!define T_C <color:grey>VARCHAR</color>
+!define T_T <color:grey>TEXT</color>
+!define T_D <color:grey>DATE</color>
+!define T_DT <color:grey>DATETIME</color>
+!define T_B <color:grey>BOOLEAN</color>
+
+' uncomment the line below if you're using computer with a retina display
+' skinparam dpi 300
+!define Table(name,desc) entity name as "desc" << (T,#FFAAAA) >>
+!define TransactionTable(name) entity name <<T,#FFAAAA>> TRANSACTION
+!define MasterTable(name) entity name <<M,#90ee90>> MASTER
+!define ViewTable(name) entity name <<V,#33CCFF>>
+!define CrossTable(name) entity name <<C,#FFFF33>>
+' we use bold for primary key
+' green color for unique
+' and underscore for not_null
+!define pk(x) <b><color:red>x</color></b>
+!define u(x) <color:green>x</color>
+!define fk(x) <u>x</u>
+!define n_n(x) <b>x</b>
+!define type(x) <color:#696969>x</color>
+!define type(x,size) <color:#696969>x[size]</color>
+
+
+' other tags available:
+' <i></i>
+' <back:COLOR></color>, where color is a color name or html color code
+' (#FFAACC)
+' see: http://plantuml.com/classes.html#More
+
+skinparam class {
+    BackgroundColor METAL
+    BorderColor Black
+    ArrowColor Black
+}
+
+
+hide methods
+hide stereotypes

@@ -1,0 +1,85 @@
+
+@startuml
+
+!include setting.pu
+
+' entities
+package "AtCoder" as atcoder {
+
+    MasterTable(contests){
+        pk(id) T_I
+        original_id T_I
+        name T_C
+    }
+
+    MasterTable(levels){
+        pk(id) T_I
+        level T_C
+    }
+
+    MasterTable(programming_languages){
+        pk(id) T_I
+        original_id T_I
+        name T_C
+        version T_C
+    }
+
+    MasterTable(problems) {
+        pk(problem_id) T_I
+        fk(level_id) T_I
+        fk(contest_id) T_I
+        original_id T_I
+        title T_C
+        score T_I
+    }
+
+    TransactionTable(problems_tags){
+        pk(problem_id) T_I
+        pk(tag_id) T_I
+    }
+
+    TransactionTable(tags){
+        pk(id) T_I
+        word T_C
+    }
+
+    MasterTable(players) {
+        pk(id) T_I
+        name T_T
+        rank T_C
+        rating T_I
+        participation_num  T_I
+        national_origin T_C
+    }
+
+    MasterTable(accounts) {
+        pk(account_id) T_I
+        name T_T
+        password T_T
+    }
+
+    TransactionTable(answers) {
+       pk(fk(problem_id)) T_I
+       pk(fk(player_id)) T_I
+       pk(fk(programming_language_id)): T_I
+       code: T_T
+       proposal_datetime: T_DT
+       code_length: T_I
+       execution_time: T_I
+       memory: T_I
+    }
+
+     answers }o----|| problems
+     answers }|----|| players
+     answers }|----|| programming_languages
+     problems_tags ||----{ problems
+     problems_tags ||----{ tags
+     problems }|----|| levels
+     problems }|----|| contests
+}
+
+
+'note right of user : 別プロジェクト\nDB-Linkで参照する
+
+
+@enduml
