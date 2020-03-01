@@ -17,6 +17,7 @@ class ProblemTransformer extends TransformerAbstract
             'original_code' => $problem->original_code,
             'title' => $problem->title,
             'score' => $problem->score,
+            'last_path' => $problem->last_path,
         ];
     }
 }

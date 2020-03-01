@@ -21,7 +21,7 @@ class CreateProblemsTable extends Migration
             $table->foreign('contest_id')->references('id')->on('contests');
             $table->string('original_code');
             $table->string('title');
-            $table->integer('score');
+            $table->integer('score')->default(0);
             $table->timestamps();
         });
     }

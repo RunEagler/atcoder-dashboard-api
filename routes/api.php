@@ -27,7 +27,13 @@ $api->version('v1', ['middleware' => ['cors', 'api.throttle'], 'limit' => 100, '
     $api->get('/levels', '\App\Api\V1\Controllers\LevelController@list');
     $api->get('/contests/{contest_id}/problems', '\App\Api\V1\Controllers\ProblemController@list');
     $api->get('/problems/{problem_id}', '\App\Api\V1\Controllers\ProblemController@get');
+    $api->post('/problems/add_last_path','\App\Api\V1\Controllers\ProblemController@add_last_path');
+    $api->put('/problems/{problem_id}','\App\Api\V1\Controllers\ProblemController@update');
     $api->get('/contests', '\App\Api\V1\Controllers\ContestController@list');
+    $api->post('/players', '\App\Api\V1\Controllers\PlayerController@entry');
+    $api->post('/answers', '\App\Api\V1\Controllers\AnswerController@entry');
+    $api->post('/answers/code/import', '\App\Api\V1\Controllers\AnswerController@import_code');
+    $api->post('/tags','\App\Api\V1\Controllers\TagController@create');
 });
 
 

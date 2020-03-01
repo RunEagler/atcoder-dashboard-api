@@ -13,22 +13,22 @@ class LevelSeeder extends Seeder
     {
         $param = [
             [
-                'level' => 'A',
+                'level' => 'a',
             ],
             [
-                'level' => 'B'
+                'level' => 'b'
             ],
             [
-                'level' => 'C'
+                'level' => 'c'
             ],
             [
-                'level' => 'D'
+                'level' => 'd'
             ],
             [
-                'level' => 'E'
+                'level' => 'e'
             ],
             [
-                'level' => 'F'
+                'level' => 'f'
             ]
         ];
         DB::table('levels')->insert($param);

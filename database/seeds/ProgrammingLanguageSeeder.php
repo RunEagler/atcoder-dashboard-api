@@ -14,37 +14,37 @@ class ProgrammingLanguageSeeder extends Seeder
 
         $param = [
             [
-                'original_id'=>'3014',
+                'original_code'=>'3014',
                 'name'=>'Haskell',
                 'version'=>'GHC 7.10.3',
             ],
             [
-                'original_id'=>'3013',
+                'original_code'=>'3013',
                 'name'=>'Go',
                 'version'=>'1.6',
             ],
             [
-                'original_id'=>'3023',
+                'original_code'=>'3023',
                 'name'=>'Python3',
                 'version'=>'3.4.3',
             ],
             [
-                'original_id'=>'3014',
+                'original_code'=>'3014',
                 'name'=>'Haskell',
                 'version'=>'GHC 7.10.3',
             ],
             [
-                'original_id'=>'3524',
+                'original_code'=>'3524',
                 'name'=>'PHP',
                 'version'=>'7.0.15',
             ],
             [
-                'original_id'=>'3504',
+                'original_code'=>'3504',
                 'name'=>'Rust',
                 'version'=>'1.15.1',
             ],
             [
-                'original_id'=>'3025',
+                'original_code'=>'3025',
                 'name'=>'Scala',
                 'version'=>'2.11.7',
             ],

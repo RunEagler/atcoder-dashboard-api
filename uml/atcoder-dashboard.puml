@@ -8,7 +8,7 @@ package "AtCoder" as atcoder {
 
     MasterTable(contests){
         pk(id) T_I
-        original_id T_I
+        original_code T_I
         name T_C
     }
 
@@ -19,7 +19,7 @@ package "AtCoder" as atcoder {
 
     MasterTable(programming_languages){
         pk(id) T_I
-        original_id T_I
+        original_code T_I
         name T_C
         version T_C
     }
@@ -28,7 +28,7 @@ package "AtCoder" as atcoder {
         pk(problem_id) T_I
         fk(level_id) T_I
         fk(contest_id) T_I
-        original_id T_I
+        original_code T_I
         title T_C
         score T_I
     }
@@ -63,10 +63,12 @@ package "AtCoder" as atcoder {
        pk(fk(player_id)) T_I
        pk(fk(programming_language_id)): T_I
        code: T_T
-       proposal_datetime: T_DT
        code_length: T_I
        execution_time: T_I
        memory: T_I
+       proposal_datetime: T_DT
+       answer_url: T_C
+       done_crawling: T_B
     }
 
      answers }o----|| problems

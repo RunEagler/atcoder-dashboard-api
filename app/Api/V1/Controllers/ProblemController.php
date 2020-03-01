@@ -5,16 +5,66 @@ namespace App\Api\V1\Controllers;
 use App\Contest;
 use App\Level;
 use App\Problem;
+use App\ProblemTag;
 use App\Transformers\ProblemTransformer;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use SplFileObject;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ProblemController extends Controller
 {
+    public function add_last_path(){
+
+        $path =app_path()."/Api/V1/CSV/problems.csv";
+        $f = fopen($path, "r");
+        while ($line = fgetcsv($f)) {
+            $title = $line[2];
+            $last_path = $line[4];
+            $problem = Problem::query()->where("title", $title);
+            $problem->update(['last_path' => $last_path]);
+        }
+
+        fclose($f);
+    }
+
+    public function import(){
+
+        $levels = Level::All();
+        $contests = Contest::All();
+
+        $level_map = array();
+        $contest_map = array();
+        foreach ($levels as $level) {
+            $level_map[$level->level] = $level->id;
+        }
+        foreach ($contests as $contest) {
+            $contest_map[$contest->original_code] = $contest->id;
+        }
+        $path =app_path()."/Api/V1/CSV/problems.csv";
+        $f = fopen($path, "r");
+        while ($line = fgetcsv($f)) {
+            $original_code = $line[0];
+            $contest = $line[1];
+            $title = $line[2];
+            $level = $line[3];
+
+            $level_id =$level_map[$level];
+            $problem = new Problem();
+
+            $problem->level_id = $level_id;
+            $problem->contest_id = $contest_map[$contest];
+            $problem->original_code = $original_code;
+            $problem->title = $title;
+            $problem->score = 0;
+            $problem->save();
+        }
+
+        fclose($f);
+    }
 
     public function get($problem_id)
     {
@@ -30,51 +80,32 @@ class ProblemController extends Controller
 
     public function list($contest_id, Request $request)
     {
-
-//        $levels = Level::All();
-//        $contests = Contest::All();
-//
-//        $level_map = array();
-//        $contest_map = array();
-//        foreach ($levels as $level) {
-//            $level_map[$level->level] = $level->id;
-//        }
-//        foreach ($contests as $contest) {
-//            $contest_map[$contest->original_code] = $contest->id;
-//        }
-//        $path =app_path()."/Api/V1/Controllers/problems.csv";
-//        $f = fopen($path, "r");
-////        $file = new SplFileObject(app_path()+"/Api/V1/Controllers/problems.csv");
-////        $file->setFlags(SplFileObject::READ_CSV);
-//        while ($line = fgetcsv($f)) {
-//            $original_code = $line[0];
-//            $contest = $line[1];
-//            $title = $line[2];
-//            $level = $line[3];
-//
-//            $level_id =$level_map[$level];
-//            $problem = new Problem();
-//
-//            $problem->level_id = $level_id;
-//            $problem->contest_id = $contest_map[$contest];
-//            $problem->original_code = $original_code;
-//            $problem->title = $title;
-//            $problem->score = 0;
-//            $problem->save();
-//        }
-//
-//        fclose($f);
-
         $level_id = $request->level_id;
+        $page = $request->page;
 
         $q = Problem::query();
         $q->where('contest_id', $contest_id);
         if (!is_null($level_id)) {
             $q->where('level_id', $level_id);
         }
-        $problems = $q->paginate(5, ['*'], 'page', 2);
+        $problems = $q->paginate(10, ['*'], 'page', $page);
 
         return $this->response->paginator($problems, new ProblemTransformer);
+    }
+
+    public function update($problem_id, Request $request){
+
+        $tags = $request->get('tags');
+        $problem = Problem::query()->where('id',$problem_id);
+        ProblemTag::query()->where('id',$problem_id)->delete();
+        foreach ($tags as $tag){
+            $problem_tag_entity = new ProblemTag();
+            $problem_tag_entity->problem_id = $problem_id;
+            $problem_tag_entity->tag_id = $tag['id'];
+            $problem_tag_entity->save();
+        }
+
+        return response('',Response::HTTP_NO_CONTENT);
     }
 
 

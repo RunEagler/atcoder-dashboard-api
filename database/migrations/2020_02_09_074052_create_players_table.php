@@ -15,11 +15,11 @@ class CreatePlayersTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('rank');
-            $table->integer('rating');
-            $table->integer('participation_num');
-            $table->string('national_origin');
+            $table->string('name')->default('');
+            $table->string('rank')->nullable();
+            $table->integer('rating')->nullable();
+            $table->integer('participation_num')->nullable();
+            $table->string('national_origin')->nullable();
             $table->timestamps();
         });
     }

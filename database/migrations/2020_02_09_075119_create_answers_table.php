@@ -25,10 +25,12 @@ class CreateAnswersTable extends Migration
             $table->integer('code_length');
             $table->integer('execution_time');
             $table->integer('memory');
-            $table->timestamp('proposal_datetime');
+            $table->timestamp('proposal_datetime')->nullable();
+            $table->text('answer_url');
+            $table->boolean('done_crawling')->default(false);
             $table->timestamps();
 
-            $table->unique(['problem_id', 'player_id','programming_language_id']);
+            $table->unique(['problem_id', 'player_id','programming_language_id','answer_url'])->name("problem_player_language_url_unique");
 
         });
     }
