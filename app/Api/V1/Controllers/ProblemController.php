@@ -96,12 +96,13 @@ class ProblemController extends Controller
 
     public function update($problem_id, Request $request)
     {
-
-        $tag_ids = $request->get('tag_ids');
+        $is_answer = $request->get('is_answer');
+        $is_favorite = $request->get('is_favorite');
         $problem = Problem::query()->where('id', $problem_id)->first();
 
-        $problem->tags()->detach();
-        $problem->tags()->attach($tag_ids);
+        $problem->is_answer = $is_answer;
+        $problem->is_favorite = $is_favorite;
+        $problem->save();
 
         return response('', Response::HTTP_NO_CONTENT);
     }

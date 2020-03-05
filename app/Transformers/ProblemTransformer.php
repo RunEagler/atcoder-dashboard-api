@@ -18,6 +18,8 @@ class ProblemTransformer extends TransformerAbstract
             'title' => $problem->title,
             'score' => $problem->score,
             'last_path' => $problem->last_path,
+            'is_answer' => $problem->is_answer,
+            'is_favorite' => $problem->is_favorite,
             'tags' => $problem->tags()->get(),
         ];
     }
