@@ -21,7 +21,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-$api->version('v1', ['middleware' => ['cors', 'api.throttle'], 'limit' => 100, 'expires' => 5], function (Router $api) {
+$api->version('v1', ['middleware' => ['api.throttle'], 'limit' => 1000, 'expires' => 5], function (Router $api) {
+
+    Route::options('', function () {
+        return response()->json();
+    });
 
     $api->get('/programming_languages', '\App\Api\V1\Controllers\ProgrammingLanguageController@list');
     $api->get('/levels', '\App\Api\V1\Controllers\LevelController@list');
@@ -29,11 +33,14 @@ $api->version('v1', ['middleware' => ['cors', 'api.throttle'], 'limit' => 100, '
     $api->get('/problems/{problem_id}', '\App\Api\V1\Controllers\ProblemController@get');
     $api->post('/problems/add_last_path','\App\Api\V1\Controllers\ProblemController@add_last_path');
     $api->put('/problems/{problem_id}','\App\Api\V1\Controllers\ProblemController@update');
+    $api->post('/problems/{problem_id}/tags/{tag_id}','\App\Api\V1\Controllers\ProblemController@add_tag');
+    $api->delete('/problems/{problem_id}/tags/{tag_id}','\App\Api\V1\Controllers\ProblemController@delete_tag');
     $api->get('/contests', '\App\Api\V1\Controllers\ContestController@list');
     $api->post('/players', '\App\Api\V1\Controllers\PlayerController@entry');
     $api->post('/answers', '\App\Api\V1\Controllers\AnswerController@entry');
     $api->post('/answers/code/import', '\App\Api\V1\Controllers\AnswerController@import_code');
     $api->post('/tags','\App\Api\V1\Controllers\TagController@create');
+    $api->get('/tags','\App\Api\V1\Controllers\TagController@list');
 });
 
 

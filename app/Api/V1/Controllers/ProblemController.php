@@ -17,9 +17,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ProblemController extends Controller
 {
-    public function add_last_path(){
+    public function add_last_path()
+    {
 
-        $path =app_path()."/Api/V1/CSV/problems.csv";
+        $path = app_path() . "/Api/V1/CSV/problems.csv";
         $f = fopen($path, "r");
         while ($line = fgetcsv($f)) {
             $title = $line[2];
@@ -31,7 +32,8 @@ class ProblemController extends Controller
         fclose($f);
     }
 
-    public function import(){
+    public function import()
+    {
 
         $levels = Level::All();
         $contests = Contest::All();
@@ -44,7 +46,7 @@ class ProblemController extends Controller
         foreach ($contests as $contest) {
             $contest_map[$contest->original_code] = $contest->id;
         }
-        $path =app_path()."/Api/V1/CSV/problems.csv";
+        $path = app_path() . "/Api/V1/CSV/problems.csv";
         $f = fopen($path, "r");
         while ($line = fgetcsv($f)) {
             $original_code = $line[0];
@@ -52,7 +54,7 @@ class ProblemController extends Controller
             $title = $line[2];
             $level = $line[3];
 
-            $level_id =$level_map[$level];
+            $level_id = $level_map[$level];
             $problem = new Problem();
 
             $problem->level_id = $level_id;
@@ -89,21 +91,32 @@ class ProblemController extends Controller
             $q->where('level_id', $level_id);
         }
         $problems = $q->paginate(10, ['*'], 'page', $page);
-
         return $this->response->paginator($problems, new ProblemTransformer);
     }
 
-    public function update($problem_id, Request $request){
+    public function update($problem_id, Request $request)
+    {
 
-        $tags = $request->get('tags');
-        $problem = Problem::query()->where('id',$problem_id);
-        ProblemTag::query()->where('id',$problem_id)->delete();
-        foreach ($tags as $tag){
-            $problem_tag_entity = new ProblemTag();
-            $problem_tag_entity->problem_id = $problem_id;
-            $problem_tag_entity->tag_id = $tag['id'];
-            $problem_tag_entity->save();
-        }
+        $tag_ids = $request->get('tag_ids');
+        $problem = Problem::query()->where('id', $problem_id)->first();
+
+        $problem->tags()->detach();
+        $problem->tags()->attach($tag_ids);
+
+        return response('', Response::HTTP_NO_CONTENT);
+    }
+    public function add_tag($problem_id, $tag_id)
+    {
+        $problem = Problem::query()->where('id', $problem_id)->first();
+        $problem->tags()->attach([$tag_id]);
+
+        return response('',Response::HTTP_CREATED);
+    }
+
+    public function delete_tag($problem_id, $tag_id)
+    {
+        $problem = Problem::query()->where('id', $problem_id)->first();
+        $problem->tags()->detach([$tag_id]);
 
         return response('',Response::HTTP_NO_CONTENT);
     }

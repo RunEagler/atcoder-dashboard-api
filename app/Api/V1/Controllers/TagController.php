@@ -16,13 +16,18 @@ class TagController extends Controller
     }
 
     public function create(Request $request){
+        $tag_entity = new Tag();
 
         if($request->has('word')){
             $word =$request->input('word');
-            $tag_entity = new Tag();
+            if(Tag::query()->where('word',$word)->exists()){
+                return response('',Response::HTTP_CREATED);
+            }
             $tag_entity->word = $word;
             $tag_entity->save();
+        }else{
+            return \response('',Response::HTTP_BAD_REQUEST);
         }
-        return response('',Response::HTTP_CREATED);
+        return response($tag_entity->getAttributes(),Response::HTTP_CREATED);
     }
 }
