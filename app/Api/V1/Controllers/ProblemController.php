@@ -90,7 +90,7 @@ class ProblemController extends Controller
         if (!is_null($level_id)) {
             $q->where('level_id', $level_id);
         }
-        $problems = $q->paginate(10, ['*'], 'page', $page);
+        $problems = $q->paginate(50, ['*'], 'page', $page);
         return $this->response->paginator($problems, new ProblemTransformer);
     }
 
